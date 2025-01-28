@@ -2,7 +2,8 @@ import MainSlider from "@/components/main/main.slider";
 import { Container } from "@mui/material";
 import { sendRequest } from "@/utils/api";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { send } from "process";
 
 export default async function HomePage() {
   // get session
@@ -25,6 +26,7 @@ export default async function HomePage() {
     method: "POST",
     body: { category: "PARTY", limit: 10 },
   });
+
   return (
     <Container>
       <MainSlider title={"Top Chill"} data={chills?.data ?? []} />

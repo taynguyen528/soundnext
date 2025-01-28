@@ -66,6 +66,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function AppHeader() {
   const { data: session } = useSession();
+  console.log(">>> check session: ", session);
 
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -209,7 +210,7 @@ export default function AppHeader() {
               }}
               onClick={() => handleRedirectHome()}
             >
-              TayNguyen SC
+              HoiDanIt SC
             </Typography>
             <Search>
               <SearchIconWrapper>
@@ -234,18 +235,16 @@ export default function AppHeader() {
                 },
               }}
             >
-              {session ? (
+              {session ? ( //fragment react
                 <>
                   <Link href={"/playlist"}>Playlists</Link>
                   <Link href={"/like"}>Likes</Link>
                   <span>Upload</span>
-                  <Avatar onClick={handleProfileMenuOpen}>TN</Avatar>
+                  <Avatar onClick={handleProfileMenuOpen}>ER</Avatar>
                 </>
               ) : (
                 <>
-                  <Link href={"#"} onClick={() => signIn()}>
-                    Login
-                  </Link>
+                  <Link href={"/auth/signin"}>Login</Link>
                 </>
               )}
             </Box>
