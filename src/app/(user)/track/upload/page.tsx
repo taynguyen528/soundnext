@@ -1,9 +1,14 @@
-"use client"
+"use client";
+
+import UploadPages from "@/components/track/upload.tabs";
+import { Container } from "@mui/material";
 
 const UploadPage = () => {
-  return <div>Upload page
-    <input type="file" />
-  </div>;
+  return (
+    <Container>
+      <UploadPages />
+    </Container>
+  );
 };
 
 export default UploadPage;

@@ -49,4 +49,31 @@ declare global {
     };
     result: T[];
   }
+
+  interface ITrackComment {
+    _id: string;
+    content: string;
+    moment: number;
+    user: {
+      _id: string;
+      email: string;
+      name: string;
+      role: string;
+      type: string;
+    };
+    track: string;
+    isDeleted: boolean;
+
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  interface IShareTrack extends ITrackTop {
+    isPlaying: boolean;
+  }
+
+  interface ITrackContext {
+    currentTrack: IShareTrack;
+    setCurrentTrack: (v: IShareTrack) => void;
+  }
 }

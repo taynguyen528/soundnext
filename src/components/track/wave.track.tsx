@@ -8,8 +8,17 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import "./wave.scss";
 import { Tooltip } from "@mui/material";
+import { fetchDefaultImages, sendRequest } from "@/utils/api";
+import { useTrackContext } from "@/lib/track.wrapper";
 
-const WaveTrack = () => {
+interface IProps {
+  track: ITrackTop | null;
+  comments: ITrackComment[];
+}
+
+const WaveTrack = (props: IProps) => {
+  const { track, comments } = props;
+
   const searchParams = useSearchParams();
   const fileName = searchParams.get("audio");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,6 +26,7 @@ const WaveTrack = () => {
 
   const [time, setTime] = useState<string>("0:00");
   const [duration, setDuration] = useState<string>("0:00");
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
   const optionsMemo = useMemo((): Omit<WaveSurferOptions, "container"> => {
     let gradient, progressGradient;
@@ -78,6 +88,8 @@ const WaveTrack = () => {
   }, []);
   const wavesurfer = useWavesurfer(containerRef, optionsMemo);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const [trackInfo, setTrackInfo] = useState<ITrackTop | null>(null);
 
   // Initialize wavesurfer when the container mounts
   // or any of the props change
@@ -154,6 +166,19 @@ const WaveTrack = () => {
     const percent = (moment / hardCodeDuration) * 100;
     return `${percent}%`;
   };
+
+  useEffect(() => {
+    if (wavesurfer && currentTrack.isPlaying) {
+      wavesurfer.pause();
+    }
+  }, [currentTrack]);
+
+  useEffect(() => {
+    if (track?._id && !currentTrack?._id) {
+      setCurrentTrack({ ...track, isPlaying: false });
+    }
+  }, [track]);
+
   return (
     <div style={{ marginTop: 20 }}>
       <div
@@ -179,7 +204,15 @@ const WaveTrack = () => {
           <div className="info" style={{ display: "flex" }}>
             <div>
               <div
-                onClick={() => onPlayClick()}
+                onClick={() => {
+                  onPlayClick();
+                  if (track && wavesurfer) {
+                    setCurrentTrack({
+                      ...currentTrack,
+                      isPlaying: false,
+                    });
+                  }
+                }}
                 style={{
                   borderRadius: "50%",
                   background: "#f50",
@@ -208,7 +241,7 @@ const WaveTrack = () => {
                   color: "white",
                 }}
               >
-                Tay Nguyen
+                {track?.title}
               </div>
               <div
                 style={{
@@ -220,7 +253,7 @@ const WaveTrack = () => {
                   color: "white",
                 }}
               >
-                TN
+                {track?.description}
               </div>
             </div>
           </div>
@@ -240,16 +273,16 @@ const WaveTrack = () => {
               }}
             ></div>
             <div className="comments" style={{ position: "relative" }}>
-              {arrComments.map((item) => {
+              {comments.map((item) => {
                 return (
-                  <Tooltip title={item.content} arrow>
+                  <Tooltip title={item.content} arrow key={item._id}>
                     <img
                       onPointerMove={(e) => {
                         const hover = hoverRef.current!;
                         hover.style.width = calLeft(item.moment + 3);
                       }}
-                      key={item.id}
-                      src={`http://localhost:8000/images/chill1.png`}
+                      key={item._id}
+                      src={fetchDefaultImages(item.user.type)}
                       alt=""
                       style={{
                         width: 20,
@@ -275,13 +308,21 @@ const WaveTrack = () => {
             alignItems: "center",
           }}
         >
-          <div
-            style={{
-              background: "#ccc",
-              width: 250,
-              height: 250,
-            }}
-          ></div>
+          {track?.imgUrl ? (
+            <img
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track?.imgUrl}`}
+              width={250}
+              height={250}
+            />
+          ) : (
+            <div
+              style={{
+                background: "#ccc",
+                width: 250,
+                height: 250,
+              }}
+            ></div>
+          )}
         </div>
       </div>
     </div>

@@ -21,6 +21,7 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { fetchDefaultImages } from "@/utils/api";
 
 //styled-component
 const Search = styled("div")(({ theme }) => ({
@@ -66,7 +67,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function AppHeader() {
   const { data: session } = useSession();
-  console.log(">>> check session: ", session);
+  // console.log(">>> check session: ", session);
 
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -114,7 +115,7 @@ export default function AppHeader() {
     >
       <MenuItem>
         <Link
-          href={"/profile"}
+          href={`/profile/${session?.user?._id}`}
           style={{
             color: "unset",
             textDecoration: "unset",
@@ -210,7 +211,7 @@ export default function AppHeader() {
               }}
               onClick={() => handleRedirectHome()}
             >
-              HoiDanIt SC
+              TayNguyen SC
             </Typography>
             <Search>
               <SearchIconWrapper>
@@ -239,8 +240,14 @@ export default function AppHeader() {
                 <>
                   <Link href={"/playlist"}>Playlists</Link>
                   <Link href={"/like"}>Likes</Link>
-                  <span>Upload</span>
-                  <Avatar onClick={handleProfileMenuOpen}>ER</Avatar>
+                  <Link href={"/track/upload"}>Upload</Link>
+                  {/* <Avatar onClick={handleProfileMenuOpen}>ER</Avatar> */}
+                  <img
+                    src={fetchDefaultImages(session.user.type)}
+                    alt="avatar"
+                    style={{ width: 35, height: 35, cursor: "pointer" }}
+                    onClick={handleProfileMenuOpen}
+                  />
                 </>
               ) : (
                 <>
