@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { fetchDefaultImages } from "@/utils/api";
+import Image from "next/image";
 
 //styled-component
 const Search = styled("div")(({ theme }) => ({
@@ -241,11 +242,12 @@ export default function AppHeader() {
                   <Link href={"/playlist"}>Playlists</Link>
                   <Link href={"/like"}>Likes</Link>
                   <Link href={"/track/upload"}>Upload</Link>
-                  {/* <Avatar onClick={handleProfileMenuOpen}>ER</Avatar> */}
-                  <img
+
+                  <Image
                     src={fetchDefaultImages(session.user.type)}
                     alt="avatar"
-                    style={{ width: 35, height: 35, cursor: "pointer" }}
+                    height={35}
+                    width={35}
                     onClick={handleProfileMenuOpen}
                   />
                 </>

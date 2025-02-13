@@ -9,7 +9,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Divider from "@mui/material/Divider";
 import Link from "next/link";
-
+import { convertSlugUrl } from "@/utils/api";
+import Image from "next/image";
+import a from "../../../public/flowers.jpg";
 interface IProps {
   data: ITrackTop[];
   title: string;
@@ -64,6 +66,32 @@ const MainSlider = (props: IProps) => {
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -90,11 +118,27 @@ const MainSlider = (props: IProps) => {
         {data.map((track) => {
           return (
             <div className="track" key={track._id}>
-              <img
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`}
-              />
+              <div
+                style={{
+                  position: "relative",
+                  height: "150px",
+                  width: "100%",
+                }}
+              >
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`}
+                  // src={a}
+                  alt="image"
+                  fill
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
               <Link
-                href={`/track/${track._id}?audio=${track.trackUrl}&id=${track._id}`}
+                href={`/track/${convertSlugUrl(track.title)}-${
+                  track._id
+                }.html?audio=${track.trackUrl}`}
               >
                 <h4>{track.title}</h4>
               </Link>
