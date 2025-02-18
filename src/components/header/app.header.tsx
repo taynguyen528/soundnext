@@ -10,19 +10,18 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { fetchDefaultImages } from "@/utils/api";
 import Image from "next/image";
+import ActiveLink from "./active.link";
 
 //styled-component
 const Search = styled("div")(({ theme }) => ({
@@ -99,16 +98,8 @@ export default function AppHeader() {
     const renderMenu = (
         <Menu
             anchorEl={anchorEl}
-            // anchorOrigin={{
-            //     vertical: 'top',
-            //     horizontal: 'right',
-            // }}
             id={menuId}
             keepMounted
-            // transformOrigin={{
-            //     vertical: 'top',
-            //     horizontal: 'right',
-            // }}
             open={isMenuOpen}
             onClose={handleMenuClose}
             transformOrigin={{ horizontal: "right", vertical: "top" }}
@@ -216,7 +207,7 @@ export default function AppHeader() {
                             }}
                             onClick={() => handleRedirectHome()}
                         >
-                            TayNguyen SC
+                            TayNguyen SN
                         </Typography>
                         <Search>
                             <SearchIconWrapper>
@@ -246,14 +237,27 @@ export default function AppHeader() {
                                 "> a": {
                                     color: "unset",
                                     textDecoration: "unset",
+                                    padding: "5px",
+
+                                    "&.active": {
+                                        background: "#3b4a59",
+                                        color: "#cefaff",
+                                        borderRadius: "5px",
+                                    },
                                 },
                             }}
                         >
                             {session ? ( //fragment react
                                 <>
-                                    <Link href={"/playlist"}>Playlists</Link>
-                                    <Link href={"/like"}>Likes</Link>
-                                    <Link href={"/track/upload"}>Upload</Link>
+                                    <ActiveLink href={"/playlist"}>
+                                        Playlists
+                                    </ActiveLink>
+                                    <ActiveLink href={"/like"}>
+                                        Likes
+                                    </ActiveLink>
+                                    <ActiveLink href={"/track/upload"}>
+                                        Upload
+                                    </ActiveLink>
 
                                     <Image
                                         src={fetchDefaultImages(
@@ -267,7 +271,9 @@ export default function AppHeader() {
                                 </>
                             ) : (
                                 <>
-                                    <Link href={"/auth/signin"}>Login</Link>
+                                    <ActiveLink href={"/auth/signin"}>
+                                        Login
+                                    </ActiveLink>
                                 </>
                             )}
                         </Box>

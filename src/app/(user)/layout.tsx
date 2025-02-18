@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Tiêu đề from layout",
+  title: "Trang chủ | TayNguyen SN",
   description: "Miêu tả ",
 };
 

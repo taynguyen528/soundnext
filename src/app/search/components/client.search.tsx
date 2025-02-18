@@ -29,7 +29,7 @@ const ClientSearch = () => {
         }
     };
     useEffect(() => {
-        document.title = `"${query}" trên Tây Nguyên SC`;
+        document.title = `"${query}" trên Tây Nguyên SN`;
 
         //fetch data
         if (query) fetchData(query);
